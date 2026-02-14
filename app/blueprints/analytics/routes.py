@@ -18,6 +18,8 @@ def segments():
         .all()
     )
     dist = {label: int(cnt) for label, cnt in rows}
+    if not dist:
+        dist = {"Dasar": 0, "Efisien": 0, "Kritis & Bertanggung Jawab": 0}
 
     segments = [
         {"label": "Dasar", "desc": "Pemanfaatan AI untuk kebutuhan dasar, intensitas relatif rendah–sedang."},

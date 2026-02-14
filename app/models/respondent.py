@@ -12,8 +12,9 @@ class Respondent(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     consent = db.Column(db.Boolean, default=False, nullable=False)
 
-    # opsional (boleh null demi anonimitas)
-    university = db.Column(db.String(150), nullable=True)
-    major = db.Column(db.String(150), nullable=True)
-    education_level = db.Column(db.String(10), nullable=True)
-    batch_year = db.Column(db.Integer, nullable=True)
+    # A. Profil Responden (sesuai kuesioner)
+    name_optional = db.Column(db.String(150), nullable=True)   # A1 opsional
+    university = db.Column(db.String(150), nullable=True)      # A2
+    major = db.Column(db.String(150), nullable=True)           # A3
+    semester = db.Column(db.String(10), nullable=True)         # A4
+    used_ai = db.Column(db.Boolean, nullable=True)             # A5

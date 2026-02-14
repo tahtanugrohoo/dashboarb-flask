@@ -1,27 +1,139 @@
 {% extends "base.html" %}
-{% block title %}Prediksi Segmen{% endblock %}
+{% block title %}Kuesioner Prediksi{% endblock %}
 {% block content %}
-  <h1>Prediksi Segmen Pemanfaatan AI</h1>
-  <p>Isi kuesioner singkat untuk memperoleh prediksi segmen menggunakan model Random Forest yang telah dilatih.</p>
+  <h1>Kuesioner Pola Pemanfaatan AI Generatif</h1>
+  <p>Jawaban bersifat anonim/dirahasiakan dan digunakan untuk keperluan penelitian.</p>
 
   <form method="post">
     {{ form.hidden_tag() }}
 
+    <h2>Persetujuan</h2>
     <div class="field">
-      <label>{{ form.consent.label }}</label><br>
-      {{ form.consent() }}
+      {{ form.consent() }} {{ form.consent.label }}
+      {% for e in form.consent.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
+    </div>
+
+    <h2>A. Profil Responden</h2>
+    <div class="field">
+      <label>{{ form.a1_name.label }}</label><br>
+      {{ form.a1_name(size=50) }}
+      {% for e in form.a1_name.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="field">
+      <label>{{ form.a2_univ.label }}</label><br>
+      {{ form.a2_univ(size=50) }}
+      {% for e in form.a2_univ.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="field">
+      <label>{{ form.a3_major.label }}</label><br>
+      {{ form.a3_major(size=50) }}
+      {% for e in form.a3_major.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="field">
+      <label>{{ form.a4_semester.label }}</label><br>
+      {% for sub in form.a4_semester %}
+        <label style="margin-right:10px;">{{ sub() }} {{ sub.label.text }}</label>
+      {% endfor %}
+      {% for e in form.a4_semester.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="field">
+      <label>{{ form.a5_used_ai.label }}</label><br>
+      {% for sub in form.a5_used_ai %}
+        <label style="margin-right:10px;">{{ sub() }} {{ sub.label.text }}</label>
+      {% endfor %}
+      {% for e in form.a5_used_ai.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
+    </div>
+
+    <h2>B. Pola Umum Pemanfaatan AI</h2>
+
+    <div class="field">
+      <label>{{ form.b1a_when_multi.label }}</label><br>
+      {% for sub in form.b1a_when_multi %}
+        <label style="display:block;">{{ sub() }} {{ sub.label.text }}</label>
+      {% endfor %}
+      <div style="margin-top:6px;">
+        {{ form.b1a_other_text(size=60, placeholder="Isi jika memilih Lainnya") }}
+      </div>
+      {% for e in form.b1a_when_multi.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
     </div>
 
     <div class="field">
-      <label>{{ form.q1_when.label }}</label><br>
-      {{ form.q1_when() }}
+      <label>{{ form.b1b_when_single.label }}</label><br>
+      {% for sub in form.b1b_when_single %}
+        <label style="display:block;">{{ sub() }} {{ sub.label.text }}</label>
+      {% endfor %}
+      <div style="margin-top:6px;">
+        {{ form.b1b_other_text(size=60, placeholder="Isi jika memilih Lainnya") }}
+      </div>
+      {% for e in form.b1b_when_single.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
     </div>
 
     <div class="field">
-      <label>{{ form.q2_use.label }}</label><br>
-      {{ form.q2_use() }}
+      <label>{{ form.b2a_what_multi.label }}</label><br>
+      {% for sub in form.b2a_what_multi %}
+        <label style="display:block;">{{ sub() }} {{ sub.label.text }}</label>
+      {% endfor %}
+      <div style="margin-top:6px;">
+        {{ form.b2a_other_text(size=60, placeholder="Isi jika memilih Lainnya") }}
+      </div>
+      {% for e in form.b2a_what_multi.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
     </div>
 
-    {{ form.submit(class_="btn") }}
+    <div class="field">
+      <label>{{ form.b2b_what_single.label }}</label><br>
+      {% for sub in form.b2b_what_single %}
+        <label style="display:block;">{{ sub() }} {{ sub.label.text }}</label>
+      {% endfor %}
+      <div style="margin-top:6px;">
+        {{ form.b2b_other_text(size=60, placeholder="Isi jika memilih Lainnya") }}
+      </div>
+      {% for e in form.b2b_what_single.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
+    </div>
+
+    <div class="field">
+      <label>{{ form.b3_portion.label }}</label><br>
+      {% for sub in form.b3_portion %}
+        <label style="display:block;">{{ sub() }} {{ sub.label.text }}</label>
+      {% endfor %}
+      {% for e in form.b3_portion.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
+    </div>
+
+    <div class="field">
+      <label>{{ form.b4_freq.label }}</label><br>
+      {% for sub in form.b4_freq %}
+        <label style="display:block;">{{ sub() }} {{ sub.label.text }}</label>
+      {% endfor %}
+      {% for e in form.b4_freq.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
+    </div>
+
+    <h2>C. Pernyataan (Skala 1–5)</h2>
+    <p>1 = Sangat Tidak Setuju … 5 = Sangat Setuju</p>
+
+    {% macro likert(field) -%}
+      <div class="field" style="border:1px solid #eee; border-radius:12px; padding:10px;">
+        <div><b>{{ field.label.text }}</b></div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:6px;">
+          {% for sub in field %}
+            <label>{{ sub() }} {{ sub.label.text }}</label>
+          {% endfor %}
+        </div>
+        {% for e in field.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
+      </div>
+    {%- endmacro %}
+
+    {{ likert(form.c11) }} {{ likert(form.c12) }} {{ likert(form.c13) }} {{ likert(form.c14) }}
+    {{ likert(form.c21) }} {{ likert(form.c22) }} {{ likert(form.c23) }} {{ likert(form.c24) }}
+    {{ likert(form.c31) }} {{ likert(form.c32) }} {{ likert(form.c33) }} {{ likert(form.c34) }}
+    {{ likert(form.c41) }} {{ likert(form.c42) }} {{ likert(form.c43) }} {{ likert(form.c44) }}
+    {{ likert(form.c51) }} {{ likert(form.c52) }} {{ likert(form.c53) }} {{ likert(form.c54) }}
+
+    <h2>D. Situasi Penggunaan (Opsional)</h2>
+    {{ likert(form.d1) }}
+    {{ likert(form.d2) }}
+    {{ likert(form.d3) }}
+
+    <div style="margin-top:14px;">
+      {{ form.submit(class_="btn") }}
+    </div>
   </form>
 {% endblock %}
