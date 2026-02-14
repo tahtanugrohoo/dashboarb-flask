@@ -1,9 +1,25 @@
-.venv/
+# Python
 __pycache__/
 *.pyc
-*.db
+*.pyo
+*.pyd
+
+# Virtual env
+.venv/
+venv/
+
+# Env
 .env
-migrations/__pycache__/
+.env.*
+
+# Flask
 instance/
+*.db
+*.sqlite3
+
+# Migrations cache
+migrations/__pycache__/
+
+# IDE
 .vscode/
-.gitignore
+.idea/
