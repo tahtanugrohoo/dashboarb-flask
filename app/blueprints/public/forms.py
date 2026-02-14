@@ -7,7 +7,6 @@ LIKERT_CHOICES = [("1", "1"), ("2", "2"), ("3", "3"), ("4", "4"), ("5", "5")]
 SEMESTER_CHOICES = [
     ("1","1"),("2","2"),("3","3"),("4","4"),("5","5"),("6","6"),("7","7"),("8","8"),(">8",">8")
 ]
-
 YESNO_CHOICES = [("yes","Ya"), ("no","Tidak")]
 
 WHEN_CHOICES = [
@@ -48,84 +47,89 @@ FREQ_CHOICES = [
 ]
 
 class QuestionnaireForm(FlaskForm):
+    # Persetujuan
     consent = BooleanField("Saya bersedia berpartisipasi secara sukarela", validators=[DataRequired()])
 
-    # Profil (tanpa A1/A2 dst)
-    a1_name = StringField("Nama (opsional)", validators=[Optional(), Length(max=150)])
-    a2_univ = StringField("Universitas", validators=[DataRequired(), Length(max=150)])
-    a3_major = StringField("Jurusan/Program Studi", validators=[DataRequired(), Length(max=150)])
-    a4_semester = RadioField("Semester", choices=SEMESTER_CHOICES, validators=[DataRequired()])
-    a5_used_ai = RadioField("Pernah menggunakan AI generatif untuk kegiatan akademik?", choices=YESNO_CHOICES, validators=[DataRequired()])
+    # Profil
+    name_optional = StringField("Nama (opsional)", validators=[Optional(), Length(max=150)])
+    university = StringField("Universitas", validators=[DataRequired(), Length(max=150)])
+    major = StringField("Jurusan/Program Studi", validators=[DataRequired(), Length(max=150)])
+    semester = RadioField("Semester", choices=SEMESTER_CHOICES, validators=[DataRequired()])
+    used_ai = RadioField("Pernah menggunakan AI generatif untuk kegiatan akademik?", choices=YESNO_CHOICES, validators=[DataRequired()])
 
-    # Pola umum (tanpa B1/B2 dst)
-    b1a_when_multi = SelectMultipleField("Kapan Anda menggunakan AI generatif? (boleh pilih lebih dari satu)", choices=WHEN_CHOICES, validators=[DataRequired()])
-    b1a_other_text = StringField("Lainnya (isi jika memilih Lainnya)", validators=[Optional(), Length(max=200)])
+    # Pola umum
+    when_multi = SelectMultipleField("Kapan biasanya Anda menggunakan AI generatif? (boleh pilih lebih dari satu)",
+                                     choices=WHEN_CHOICES, validators=[DataRequired()])
+    when_other_text = StringField("Jika memilih 'Lainnya', tuliskan:", validators=[Optional(), Length(max=200)])
 
-    b1b_when_single = RadioField("Dari pilihan di atas, mana yang paling sering? (pilih satu)", choices=WHEN_CHOICES, validators=[DataRequired()])
-    b1b_other_text = StringField("Lainnya (isi jika memilih Lainnya)", validators=[Optional(), Length(max=200)])
+    when_single = RadioField("Dari pilihan di atas, mana yang paling sering?", choices=WHEN_CHOICES, validators=[DataRequired()])
+    when_single_other_text = StringField("Jika memilih 'Lainnya', tuliskan:", validators=[Optional(), Length(max=200)])
 
-    b2a_what_multi = SelectMultipleField("AI digunakan untuk apa saja? (boleh pilih lebih dari satu)", choices=USE_CHOICES, validators=[DataRequired()])
-    b2a_other_text = StringField("Lainnya (isi jika memilih Lainnya)", validators=[Optional(), Length(max=200)])
+    use_multi = SelectMultipleField("Untuk kebutuhan akademik, AI paling sering Anda gunakan untuk apa saja? (boleh pilih lebih dari satu)",
+                                    choices=USE_CHOICES, validators=[DataRequired()])
+    use_other_text = StringField("Jika memilih 'Lainnya', tuliskan:", validators=[Optional(), Length(max=200)])
 
-    b2b_what_single = RadioField("Dari pilihan di atas, mana yang paling sering? (pilih satu)", choices=USE_CHOICES, validators=[DataRequired()])
-    b2b_other_text = StringField("Lainnya (isi jika memilih Lainnya)", validators=[Optional(), Length(max=200)])
+    use_single = RadioField("Dari pilihan di atas, mana yang paling sering?", choices=USE_CHOICES, validators=[DataRequired()])
+    use_single_other_text = StringField("Jika memilih 'Lainnya', tuliskan:", validators=[Optional(), Length(max=200)])
 
-    b3_portion = RadioField("Seberapa besar porsi AI dalam pengerjaan tugas saat Anda menggunakannya?", choices=PORTION_CHOICES, validators=[DataRequired()])
-    b4_freq = RadioField("Seberapa sering menggunakan AI untuk akademik?", choices=FREQ_CHOICES, validators=[DataRequired()])
+    portion = RadioField("Seberapa besar porsi AI dalam pengerjaan tugas saat Anda menggunakannya?", choices=PORTION_CHOICES, validators=[DataRequired()])
+    freq = RadioField("Seberapa sering menggunakan AI untuk kegiatan akademik?", choices=FREQ_CHOICES, validators=[DataRequired()])
 
-    # Pernyataan (Likert) — label tanpa C1/C2 di depan
     # Tujuan & Perencanaan
-    c11 = RadioField("Saya menggunakan AI dengan tujuan yang jelas.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c12 = RadioField("Saya biasanya menuliskan konteks yang cukup saat bertanya ke AI.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c13 = RadioField("Saya memilih AI sebagai bantuan yang sesuai kebutuhan, bukan untuk semua hal.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c14 = RadioField("Saya menggunakan AI untuk membantu menyusun langkah belajar.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    p1 = RadioField("Saya menggunakan AI dengan tujuan yang jelas.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    p2 = RadioField("Saya biasanya menuliskan konteks yang cukup saat bertanya ke AI.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    p3 = RadioField("Saya memilih AI sebagai bantuan yang sesuai kebutuhan, bukan untuk semua hal.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    p4 = RadioField("Saya menggunakan AI untuk membantu menyusun langkah belajar.", choices=LIKERT_CHOICES, validators=[DataRequired()])
 
     # Iterasi & Modifikasi
-    c21 = RadioField("Saya sering melakukan beberapa iterasi sampai hasil sesuai.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c22 = RadioField("Saya mengubah/menyusun ulang output AI dengan kata-kata saya sendiri.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c23 = RadioField("Saya meminta AI memberi contoh/penjelasan alternatif jika kurang jelas.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c24 = RadioField("Saya menggunakan AI untuk mengecek struktur/kerapihan jawaban.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    i1 = RadioField("Saya sering melakukan beberapa iterasi sampai hasil sesuai.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    i2 = RadioField("Saya mengubah/menyusun ulang output AI dengan kata-kata saya sendiri.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    i3 = RadioField("Saya meminta AI memberi contoh/penjelasan alternatif jika kurang jelas.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    i4 = RadioField("Saya menggunakan AI untuk mengecek struktur/kerapihan jawaban.", choices=LIKERT_CHOICES, validators=[DataRequired()])
 
     # Verifikasi & Evaluasi
-    c31 = RadioField("Saya mengecek kembali jawaban AI menggunakan sumber lain.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c32 = RadioField("Saya menilai apakah jawaban AI masuk akal sebelum digunakan.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c33 = RadioField("Saya memeriksa istilah/rumus/kode dari AI sebelum dipakai.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c34 = RadioField("Jika informasi meragukan, saya mencari pembanding dulu.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    v1 = RadioField("Saya mengecek kembali jawaban AI menggunakan sumber lain.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    v2 = RadioField("Saya menilai apakah jawaban AI masuk akal sebelum digunakan.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    v3 = RadioField("Saya memeriksa istilah/rumus/kode dari AI sebelum dipakai.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    v4 = RadioField("Jika informasi meragukan, saya mencari pembanding dulu.", choices=LIKERT_CHOICES, validators=[DataRequired()])
 
     # Orientasi Pemahaman
-    c41 = RadioField("AI membantu saya memahami konsep, bukan hanya menghasilkan jawaban.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c42 = RadioField("Setelah memakai AI, saya masih berusaha menjelaskan ulang.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c43 = RadioField("Saya menggunakan AI untuk latihan, bukan hanya hasil akhir.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c44 = RadioField("Saya merasa AI membantu meningkatkan efisiensi belajar.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    u1 = RadioField("AI membantu saya memahami konsep, bukan hanya menghasilkan jawaban.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    u2 = RadioField("Setelah memakai AI, saya masih berusaha menjelaskan ulang.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    u3 = RadioField("Saya menggunakan AI untuk latihan, bukan hanya hasil akhir.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    u4 = RadioField("Saya merasa AI membantu meningkatkan efisiensi belajar.", choices=LIKERT_CHOICES, validators=[DataRequired()])
 
     # Etika & Kemandirian
-    c51 = RadioField("Saya menghindari menyalin output AI secara utuh tanpa revisi.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c52 = RadioField("Saya mempertimbangkan aturan dosen/kelas terkait penggunaan AI.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c53 = RadioField("Saya berusaha tetap mandiri sebelum meminta bantuan AI.", choices=LIKERT_CHOICES, validators=[DataRequired()])
-    c54 = RadioField("Saya memilih AI sebagai alat bantu, bukan penentu utama.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    e1 = RadioField("Saya menghindari menyalin output AI secara utuh tanpa revisi.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    e2 = RadioField("Saya mempertimbangkan aturan dosen/kelas terkait penggunaan AI.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    e3 = RadioField("Saya berusaha tetap mandiri sebelum meminta bantuan AI.", choices=LIKERT_CHOICES, validators=[DataRequired()])
+    e4 = RadioField("Saya memilih AI sebagai alat bantu, bukan penentu utama.", choices=LIKERT_CHOICES, validators=[DataRequired()])
 
     # Situasi (opsional)
-    d1 = RadioField("Saat waktu terbatas, saya cenderung memilih AI sebagai bantuan utama.", choices=LIKERT_CHOICES, validators=[Optional()])
-    d2 = RadioField("Kadang saya memakai jawaban AI jika sudah terasa cukup tanpa mengecek terlalu jauh.", choices=LIKERT_CHOICES, validators=[Optional()])
-    d3 = RadioField("Saya menggunakan AI lebih banyak untuk tugas tertentu dibanding yang lain.", choices=LIKERT_CHOICES, validators=[Optional()])
+    s1 = RadioField("Saat waktu terbatas, saya cenderung memilih AI sebagai bantuan utama.", choices=LIKERT_CHOICES, validators=[Optional()])
+    s2 = RadioField("Kadang saya memakai jawaban AI jika sudah terasa cukup tanpa mengecek terlalu jauh.", choices=LIKERT_CHOICES, validators=[Optional()])
+    s3 = RadioField("Saya menggunakan AI lebih banyak untuk tugas tertentu dibanding yang lain.", choices=LIKERT_CHOICES, validators=[Optional()])
 
     submit = SubmitField("Kirim")
 
-    def validate_b1a_when_multi(self, field):
+    # Validasi: jika "Hampir tidak pernah" dipilih, harus berdiri sendiri
+    def validate_when_multi(self, field):
         if "never" in field.data and len(field.data) > 1:
             raise ValidationError('Pilihan "Hampir tidak pernah" harus berdiri sendiri.')
 
-        if "other" in field.data and not (self.b1a_other_text.data or "").strip():
-            raise ValidationError('Anda memilih "Lainnya", mohon isi kolom Lainnya.')
+    # Validasi "Lainnya" harus diisi kalau dipilih
+    def validate_when_other_text(self, field):
+        if "other" in (self.when_multi.data or []) and not (field.data or "").strip():
+            raise ValidationError("Anda memilih 'Lainnya', mohon isi teksnya.")
 
-    def validate_b1b_when_single(self, field):
-        if field.data == "other" and not (self.b1b_other_text.data or "").strip():
-            raise ValidationError('Anda memilih "Lainnya", mohon isi kolom Lainnya.')
+    def validate_when_single_other_text(self, field):
+        if self.when_single.data == "other" and not (field.data or "").strip():
+            raise ValidationError("Anda memilih 'Lainnya', mohon isi teksnya.")
 
-    def validate_b2a_what_multi(self, field):
-        if "other" in field.data and not (self.b2a_other_text.data or "").strip():
-            raise ValidationError('Anda memilih "Lainnya", mohon isi kolom Lainnya.')
+    def validate_use_other_text(self, field):
+        if "other" in (self.use_multi.data or []) and not (field.data or "").strip():
+            raise ValidationError("Anda memilih 'Lainnya', mohon isi teksnya.")
 
-    def validate_b2b_what_single(self, field):
-        if field.data == "other" and not (self.b2b_other_text.data or "").strip():
-            raise ValidationError('Anda memilih "Lainnya", mohon isi kolom Lainnya.')
+    def validate_use_single_other_text(self, field):
+        if self.use_single.data == "other" and not (field.data or "").strip():
+            raise ValidationError("Anda memilih 'Lainnya', mohon isi teksnya.")

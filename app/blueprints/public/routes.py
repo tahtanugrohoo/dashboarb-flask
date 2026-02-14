@@ -20,50 +20,47 @@ def predict():
     if form.validate_on_submit():
         # 1) simpan responden anonim (optional)
         respondent = Respondent(
-            consent=form.consent.data,
-            name_optional=form.a1_name.data or None,
-            university=form.a2_univ.data,
-            major=form.a3_major.data,
-            semester=form.a4_semester.data,
-            used_ai=(form.a5_used_ai.data == "yes"),
+        consent=form.consent.data,
+        name_optional=form.name_optional.data or None,
+        university=form.university.data,
+        major=form.major.data,
+        semester=form.semester.data,
+        used_ai=(form.used_ai.data == "yes"),
         )
         db.session.add(respondent)
         db.session.flush()
 
         # 2) simpan input kuesioner (sebagai request prediksi)
         answers = {
-            # consent + profil
-            "consent": form.consent.data,
-            "a1_name": form.a1_name.data,
-            "a2_univ": form.a2_univ.data,
-            "a3_major": form.a3_major.data,
-            "a4_semester": form.a4_semester.data,
-            "a5_used_ai": form.a5_used_ai.data,
+  "consent": form.consent.data,
 
-            # B
-            "b1a_when_multi": form.b1a_when_multi.data,
-            "b1a_other_text": form.b1a_other_text.data,
-            "b1b_when_single": form.b1b_when_single.data,
-            "b1b_other_text": form.b1b_other_text.data,
+  "name_optional": form.name_optional.data,
+  "university": form.university.data,
+  "major": form.major.data,
+  "semester": form.semester.data,
+  "used_ai": form.used_ai.data,
 
-            "b2a_what_multi": form.b2a_what_multi.data,
-            "b2a_other_text": form.b2a_other_text.data,
-            "b2b_what_single": form.b2b_what_single.data,
-            "b2b_other_text": form.b2b_other_text.data,
+  "when_multi": form.when_multi.data,
+  "when_other_text": form.when_other_text.data,
+  "when_single": form.when_single.data,
+  "when_single_other_text": form.when_single_other_text.data,
 
-            "b3_portion": form.b3_portion.data,
-            "b4_freq": form.b4_freq.data,
+  "use_multi": form.use_multi.data,
+  "use_other_text": form.use_other_text.data,
+  "use_single": form.use_single.data,
+  "use_single_other_text": form.use_single_other_text.data,
 
-            # C (Likert)
-            "c11": form.c11.data, "c12": form.c12.data, "c13": form.c13.data, "c14": form.c14.data,
-            "c21": form.c21.data, "c22": form.c22.data, "c23": form.c23.data, "c24": form.c24.data,
-            "c31": form.c31.data, "c32": form.c32.data, "c33": form.c33.data, "c34": form.c34.data,
-            "c41": form.c41.data, "c42": form.c42.data, "c43": form.c43.data, "c44": form.c44.data,
-            "c51": form.c51.data, "c52": form.c52.data, "c53": form.c53.data, "c54": form.c54.data,
+  "portion": form.portion.data,
+  "freq": form.freq.data,
 
-            # D (opsional)
-            "d1": form.d1.data, "d2": form.d2.data, "d3": form.d3.data,
-        }
+  "p1": form.p1.data, "p2": form.p2.data, "p3": form.p3.data, "p4": form.p4.data,
+  "i1": form.i1.data, "i2": form.i2.data, "i3": form.i3.data, "i4": form.i4.data,
+  "v1": form.v1.data, "v2": form.v2.data, "v3": form.v3.data, "v4": form.v4.data,
+  "u1": form.u1.data, "u2": form.u2.data, "u3": form.u3.data, "u4": form.u4.data,
+  "e1": form.e1.data, "e2": form.e2.data, "e3": form.e3.data, "e4": form.e4.data,
+
+  "s1": form.s1.data, "s2": form.s2.data, "s3": form.s3.data,
+}
 
         req = QuestionnaireResponse(
             respondent_id=respondent.id,
