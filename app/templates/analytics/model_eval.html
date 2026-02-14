@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Evaluasi Model{% endblock %}
+{% block content %}
+  <h1>Evaluasi Model (Statik)</h1>
+  <p>Nilai di bawah bersifat statik/dummy untuk penyusunan antarmuka dashboard.</p>
+
+  <div style="display:flex; gap:16px; flex-wrap:wrap;">
+    <div style="padding:12px; border:1px solid #eee; border-radius:12px;">
+      <div>Accuracy</div>
+      <b style="font-size:24px;">{{ metrics.accuracy }}</b>
+    </div>
+    <div style="padding:12px; border:1px solid #eee; border-radius:12px;">
+      <div>Macro-F1</div>
+      <b style="font-size:24px;">{{ metrics.macro_f1 }}</b>
+    </div>
+  </div>
+
+  <h2 style="margin-top:18px;">Confusion Matrix</h2>
+  <table style="width:100%; border-collapse:collapse; margin-top:8px;">
+    <thead>
+      <tr>
+        <th style="border:1px solid #eee; padding:8px;">Actual \\ Pred</th>
+        {% for l in labels %}
+          <th style="border:1px solid #eee; padding:8px;">{{ l }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in cm %}
+        <tr>
+          <th style="border:1px solid #eee; padding:8px;">{{ labels[loop.index0] }}</th>
+          {% for val in row %}
+            <td style="border:1px solid #eee; padding:8px; text-align:center;">{{ val }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p style="margin-top:12px;">
+    Export ringkasan: <a href="{{ url_for('export.export_summary_csv') }}">Download summary.csv</a>
+  </p>
+{% endblock %}

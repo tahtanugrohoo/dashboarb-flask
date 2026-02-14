@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Analisis Segmen{% endblock %}
+
+{% block content %}
+  <h1>Analisis Segmen (Statik)</h1>
+  <p>Halaman ini menampilkan ringkasan segmen secara statik untuk keperluan presentasi awal.</p>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+    <div style="border:1px solid #eee; border-radius:12px; padding:12px;">
+      <h2>Distribusi Segmen</h2>
+      <canvas id="segChart"></canvas>
+    </div>
+
+    <div style="border:1px solid #eee; border-radius:12px; padding:12px;">
+      <h2>Definisi Segmen</h2>
+      {% for s in segments %}
+        <div style="margin-bottom:12px;">
+          <b>{{ s.label }}</b>
+          <div style="color:#555;">{{ s.desc }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Payload JSON (AMAN) -->
+  <script id="seg-data" type="application/json">
+    {{ dist | tojson }}
+  </script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const dist = JSON.parse(document.getElementById('seg-data').textContent);
+
+    const labels = Object.keys(dist);
+    const values = Object.values(dist);
+
+    const ctx = document.getElementById('segChart');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: values
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+  </script>
+{% endblock %}

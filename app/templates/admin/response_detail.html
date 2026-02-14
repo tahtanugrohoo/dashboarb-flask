@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Detail Respons{% endblock %}
+{% block content %}
+  <h1>Detail Respons</h1>
+
+  <p><b>Response ID:</b> {{ resp.id }}</p>
+  <p><b>Respondent ID:</b> {{ resp.respondent_id }}</p>
+  <p><b>Submitted at:</b> {{ resp.submitted_at }}</p>
+  <p><b>Data version:</b> {{ resp.data_version }}</p>
+
+  <h2>Jawaban (JSON)</h2>
+  <pre style="background:#fafafa; padding:12px; border:1px solid #eee; border-radius:12px; overflow:auto;">
+{{ resp.answers_json | tojson(indent=2) }}
+  </pre>
+
+  <p>
+    <a class="btn" href="{{ url_for('admin.responses_list') }}">Kembali</a>
+  </p>
+{% endblock %}

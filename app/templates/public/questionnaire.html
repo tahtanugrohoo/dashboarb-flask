@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Kuesioner{% endblock %}
+{% block content %}
+  <h1>Kuesioner Pemanfaatan AI Generatif</h1>
+  <form method="post">
+    {{ form.hidden_tag() }}
+
+    <div class="field">
+      <label>{{ form.consent.label }}</label>
+      {{ form.consent() }}
+    </div>
+
+    <div class="field">
+      <label>{{ form.q1_when.label }}</label>
+      {{ form.q1_when() }}
+    </div>
+
+    <div class="field">
+      <label>{{ form.q2_use.label }}</label>
+      {{ form.q2_use() }}
+    </div>
+
+    {{ form.submit(class_="btn") }}
+  </form>
+{% endblock %}
