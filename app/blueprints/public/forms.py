@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, StringField, RadioField, SelectMultipleField, SubmitField
+from wtforms import BooleanField, StringField, RadioField, SelectMultipleField, SubmitField, widgets
 from wtforms.validators import DataRequired, Optional, Length, ValidationError
 
 LIKERT_CHOICES = [("1", "1"), ("2", "2"), ("3", "3"), ("4", "4"), ("5", "5")]
@@ -58,15 +58,27 @@ class QuestionnaireForm(FlaskForm):
     used_ai = RadioField("Pernah menggunakan AI generatif untuk kegiatan akademik?", choices=YESNO_CHOICES, validators=[DataRequired()])
 
     # Pola umum
-    when_multi = SelectMultipleField("Kapan biasanya Anda menggunakan AI generatif? (boleh pilih lebih dari satu)",
-                                     choices=WHEN_CHOICES, validators=[DataRequired()])
+    # when_multi = SelectMultipleField("Kapan biasanya Anda menggunakan AI generatif? (boleh pilih lebih dari satu)",
+    #                                  choices=WHEN_CHOICES, validators=[DataRequired()])
+    when_multi = SelectMultipleField(
+    "Kapan biasanya Anda menggunakan AI generatif? (boleh pilih lebih dari satu)",
+    choices=WHEN_CHOICES,
+    option_widget=widgets.CheckboxInput(),
+    widget=widgets.ListWidget(prefix_label=False),
+    validators=[DataRequired()])
     when_other_text = StringField("Jika memilih 'Lainnya', tuliskan:", validators=[Optional(), Length(max=200)])
 
     when_single = RadioField("Dari pilihan di atas, mana yang paling sering?", choices=WHEN_CHOICES, validators=[DataRequired()])
     when_single_other_text = StringField("Jika memilih 'Lainnya', tuliskan:", validators=[Optional(), Length(max=200)])
 
-    use_multi = SelectMultipleField("Untuk kebutuhan akademik, AI paling sering Anda gunakan untuk apa saja? (boleh pilih lebih dari satu)",
-                                    choices=USE_CHOICES, validators=[DataRequired()])
+    # use_multi = SelectMultipleField("Untuk kebutuhan akademik, AI paling sering Anda gunakan untuk apa saja? (boleh pilih lebih dari satu)",
+    #                                 choices=USE_CHOICES, validators=[DataRequired()])
+    use_multi = SelectMultipleField(
+    "Untuk kebutuhan akademik, AI paling sering Anda gunakan untuk apa saja? (boleh pilih lebih dari satu)",
+    choices=USE_CHOICES,
+    option_widget=widgets.CheckboxInput(),
+    widget=widgets.ListWidget(prefix_label=False),
+    validators=[DataRequired()])
     use_other_text = StringField("Jika memilih 'Lainnya', tuliskan:", validators=[Optional(), Length(max=200)])
 
     use_single = RadioField("Dari pilihan di atas, mana yang paling sering?", choices=USE_CHOICES, validators=[DataRequired()])

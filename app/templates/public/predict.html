@@ -50,7 +50,7 @@
                   Profil Responden
                 </button>
               </h2>
-              <div id="cProfile" class="accordion-collapse collapse show" aria-labelledby="hProfile" data-bs-parent="#accordionQ">
+              <div id="cProfile" class="accordion-collapse collapse show" aria-labelledby="hProfile">
                 <div class="accordion-body">
                   <div class="row g-3">
                     <div class="col-12">
@@ -104,7 +104,7 @@
                   Pola Umum Pemanfaatan
                 </button>
               </h2>
-              <div id="cGeneral" class="accordion-collapse collapse" aria-labelledby="hGeneral" data-bs-parent="#accordionQ">
+              <div id="cGeneral" class="accordion-collapse collapse" aria-labelledby="hGeneral"">
                 <div class="accordion-body">
 
                   <div class="mb-3">
@@ -222,7 +222,7 @@
                   Pernyataan (Skala 1–5)
                 </button>
               </h2>
-              <div id="cLikert" class="accordion-collapse collapse" aria-labelledby="hLikert" data-bs-parent="#accordionQ">
+              <div id="cLikert" class="accordion-collapse collapse" aria-labelledby="hLikert"">
                 <div class="accordion-body">
                   <div class="alert alert-info py-2 small mb-3">
                     1 = Sangat Tidak Setuju • 2 = Tidak Setuju • 3 = Netral • 4 = Setuju • 5 = Sangat Setuju
@@ -236,9 +236,13 @@
                           <div class="mb-3">
                             <div class="small fw-semibold mb-2">{{ f.label.text }}</div>
                             <div class="btn-group flex-wrap" role="group" aria-label="likert">
-                              {% for sub in f %}
+                              <!-- {% for sub in f %}
                                 {{ sub(class_="btn-check") }}
                                 <label class="btn btn-outline-secondary btn-sm">{{ sub.label.text }}</label>
+                              {% endfor %} -->
+                              {% for sub in f %}
+                                {{ sub(class_="btn-check", id=sub.id) }}
+                                <label class="btn btn-outline-secondary btn-sm" for="{{ sub.id }}">{{ sub.label.text }}</label>
                               {% endfor %}
                             </div>
                             {% for e in f.errors %}<div class="text-danger small mt-1">{{ e }}</div>{% endfor %}
@@ -261,9 +265,13 @@
                         <div class="mb-3">
                           <div class="small fw-semibold mb-2">{{ f.label.text }}</div>
                           <div class="btn-group flex-wrap" role="group" aria-label="likert optional">
-                            {% for sub in f %}
+                            <!-- {% for sub in f %}
                               {{ sub(class_="btn-check") }}
                               <label class="btn btn-outline-secondary btn-sm">{{ sub.label.text }}</label>
+                            {% endfor %} -->
+                            {% for sub in f %}
+                              {{ sub(class_="btn-check", id=sub.id) }}
+                              <label class="btn btn-outline-secondary btn-sm" for="{{ sub.id }}">{{ sub.label.text }}</label>
                             {% endfor %}
                           </div>
                           {% for e in f.errors %}<div class="text-danger small mt-1">{{ e }}</div>{% endfor %}
