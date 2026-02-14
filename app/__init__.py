@@ -11,7 +11,6 @@ def create_app():
     login_manager.init_app(app)
     csrf.init_app(app)
 
-    # Penting: arahkan unauthorized ke endpoint login yang BENAR
     login_manager.login_view = "admin.login"
 
     # register models agar terbaca Alembic

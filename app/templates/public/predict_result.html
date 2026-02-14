@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Hasil Prediksi{% endblock %}
+{% block content %}
+  <h1>Hasil Prediksi</h1>
+
+  <p><b>Prediksi segmen:</b> {{ result.predicted_label }}</p>
+  <p><b>Model version:</b> {{ result.model_version }}</p>
+
+  {% if result.proba_json %}
+    <h2>Probabilitas</h2>
+    <ul>
+      {% for k,v in result.proba_json.items() %}
+        <li>{{ k }}: {{ '%.3f'|format(v) }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <h2>Input Kuesioner</h2>
+  <pre style="background:#fafafa; padding:12px; border:1px solid #eee; border-radius:12px; overflow:auto;">
+{{ req.answers_json | tojson(indent=2) }}
+  </pre>
+
+  <p><a class="btn" href="{{ url_for('public.predict') }}">Prediksi lagi</a></p>
+{% endblock %}

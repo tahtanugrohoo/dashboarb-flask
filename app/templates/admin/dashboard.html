@@ -4,7 +4,7 @@
 {% block content %}
   <h1>Dashboard Admin</h1>
 
-  <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+  <!-- <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
     <div style="padding:12px; border:1px solid #eee; border-radius:10px; min-width:220px;">
       <div>Total respons</div>
       <b style="font-size:24px;">{{ total_responses }}</b>
@@ -14,7 +14,22 @@
       <div>Total responden (unik)</div>
       <b style="font-size:24px;">{{ total_respondents }}</b>
     </div>
+  </div> -->
+  <div style="display:flex; gap:16px; flex-wrap:wrap;">
+    <div style="padding:12px; border:1px solid #eee; border-radius:12px;">
+      <div>Total request prediksi</div>
+      <b style="font-size:24px;">{{ total_requests }}</b>
+    </div>
+    <div style="padding:12px; border:1px solid #eee; border-radius:12px;">
+      <div>Total hasil prediksi</div>
+      <b style="font-size:24px;">{{ total_predictions }}</b>
+    </div>
+    <div style="padding:12px; border:1px solid #eee; border-radius:12px;">
+      <div>Total data hasil K-Means</div>
+      <b style="font-size:24px;">{{ total_clustered }}</b>
+    </div>
   </div>
+
 
   <h2 style="margin-top:24px;">Tren Respons per Hari</h2>
   <div style="background:#fff; border:1px solid #eee; border-radius:10px; padding:12px;">

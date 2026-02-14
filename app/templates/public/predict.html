@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Prediksi Segmen{% endblock %}
+{% block content %}
+  <h1>Prediksi Segmen Pemanfaatan AI</h1>
+  <p>Isi kuesioner singkat untuk memperoleh prediksi segmen menggunakan model Random Forest yang telah dilatih.</p>
+
+  <form method="post">
+    {{ form.hidden_tag() }}
+
+    <div class="field">
+      <label>{{ form.consent.label }}</label><br>
+      {{ form.consent() }}
+    </div>
+
+    <div class="field">
+      <label>{{ form.q1_when.label }}</label><br>
+      {{ form.q1_when() }}
+    </div>
+
+    <div class="field">
+      <label>{{ form.q2_use.label }}</label><br>
+      {{ form.q2_use() }}
+    </div>
+
+    {{ form.submit(class_="btn") }}
+  </form>
+{% endblock %}
