@@ -1,139 +1,277 @@
 {% extends "base.html" %}
-{% block title %}Kuesioner Prediksi{% endblock %}
+{% block title %}Kuesioner{% endblock %}
 {% block content %}
-  <h1>Kuesioner Pola Pemanfaatan AI Generatif</h1>
-  <p>Jawaban bersifat anonim/dirahasiakan dan digunakan untuk keperluan penelitian.</p>
+<div class="q-wrap">
+  <div class="q-head">
+    <div>
+      <h1 class="q-title">Kuesioner Pola Pemanfaatan AI Generatif</h1>
+      <p class="q-sub">Pengisian bersifat anonim. Mohon isi sesuai kondisi Anda.</p>
+    </div>
+    <div class="q-progress" aria-label="Progress pengisian">
+      <div class="q-progress__bar" id="progressBar"></div>
+      <div class="q-progress__text" id="progressText">0%</div>
+    </div>
+  </div>
 
-  <form method="post">
+  <form method="post" id="questionnaireForm" class="q-form">
     {{ form.hidden_tag() }}
 
-    <h2>Persetujuan</h2>
-    <div class="field">
-      {{ form.consent() }} {{ form.consent.label }}
-      {% for e in form.consent.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
-    </div>
+    <!-- Card: Consent -->
+    <section class="card">
+      <h2 class="card-title">Persetujuan</h2>
+      <label class="checkline">
+        {{ form.consent(class_="checkline__box", id="consent") }}
+        <span>{{ form.consent.label.text }}</span>
+      </label>
+      {% for e in form.consent.errors %}<div class="err">{{ e }}</div>{% endfor %}
+    </section>
 
-    <h2>A. Profil Responden</h2>
-    <div class="field">
-      <label>{{ form.a1_name.label }}</label><br>
-      {{ form.a1_name(size=50) }}
-      {% for e in form.a1_name.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
-    </div>
-    <div class="field">
-      <label>{{ form.a2_univ.label }}</label><br>
-      {{ form.a2_univ(size=50) }}
-      {% for e in form.a2_univ.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
-    </div>
-    <div class="field">
-      <label>{{ form.a3_major.label }}</label><br>
-      {{ form.a3_major(size=50) }}
-      {% for e in form.a3_major.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
-    </div>
-    <div class="field">
-      <label>{{ form.a4_semester.label }}</label><br>
-      {% for sub in form.a4_semester %}
-        <label style="margin-right:10px;">{{ sub() }} {{ sub.label.text }}</label>
-      {% endfor %}
-      {% for e in form.a4_semester.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
-    </div>
-    <div class="field">
-      <label>{{ form.a5_used_ai.label }}</label><br>
-      {% for sub in form.a5_used_ai %}
-        <label style="margin-right:10px;">{{ sub() }} {{ sub.label.text }}</label>
-      {% endfor %}
-      {% for e in form.a5_used_ai.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
-    </div>
+    <!-- Card: Profil -->
+    <section class="card">
+      <h2 class="card-title">Profil Responden</h2>
 
-    <h2>B. Pola Umum Pemanfaatan AI</h2>
+      <div class="grid-2">
+        <div class="field">
+          <label class="lbl">{{ form.a1_name.label.text }}</label>
+          {{ form.a1_name(class_="inp", placeholder="Opsional") }}
+          {% for e in form.a1_name.errors %}<div class="err">{{ e }}</div>{% endfor %}
+        </div>
 
-    <div class="field">
-      <label>{{ form.b1a_when_multi.label }}</label><br>
-      {% for sub in form.b1a_when_multi %}
-        <label style="display:block;">{{ sub() }} {{ sub.label.text }}</label>
-      {% endfor %}
-      <div style="margin-top:6px;">
-        {{ form.b1a_other_text(size=60, placeholder="Isi jika memilih Lainnya") }}
+        <div class="field">
+          <label class="lbl">{{ form.a2_univ.label.text }}</label>
+          {{ form.a2_univ(class_="inp", placeholder="Contoh: UNSOED") }}
+          {% for e in form.a2_univ.errors %}<div class="err">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="field">
+          <label class="lbl">{{ form.a3_major.label.text }}</label>
+          {{ form.a3_major(class_="inp", placeholder="Contoh: Teknik Informatika") }}
+          {% for e in form.a3_major.errors %}<div class="err">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="field">
+          <label class="lbl">{{ form.a4_semester.label.text }}</label>
+          <div class="chips">
+            {% for sub in form.a4_semester %}
+              <label class="chip">
+                {{ sub(class_="chip__radio") }}
+                <span class="chip__text">{{ sub.label.text }}</span>
+              </label>
+            {% endfor %}
+          </div>
+          {% for e in form.a4_semester.errors %}<div class="err">{{ e }}</div>{% endfor %}
+        </div>
       </div>
-      {% for e in form.b1a_when_multi.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
-    </div>
 
-    <div class="field">
-      <label>{{ form.b1b_when_single.label }}</label><br>
-      {% for sub in form.b1b_when_single %}
-        <label style="display:block;">{{ sub() }} {{ sub.label.text }}</label>
-      {% endfor %}
-      <div style="margin-top:6px;">
-        {{ form.b1b_other_text(size=60, placeholder="Isi jika memilih Lainnya") }}
-      </div>
-      {% for e in form.b1b_when_single.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
-    </div>
-
-    <div class="field">
-      <label>{{ form.b2a_what_multi.label }}</label><br>
-      {% for sub in form.b2a_what_multi %}
-        <label style="display:block;">{{ sub() }} {{ sub.label.text }}</label>
-      {% endfor %}
-      <div style="margin-top:6px;">
-        {{ form.b2a_other_text(size=60, placeholder="Isi jika memilih Lainnya") }}
-      </div>
-      {% for e in form.b2a_what_multi.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
-    </div>
-
-    <div class="field">
-      <label>{{ form.b2b_what_single.label }}</label><br>
-      {% for sub in form.b2b_what_single %}
-        <label style="display:block;">{{ sub() }} {{ sub.label.text }}</label>
-      {% endfor %}
-      <div style="margin-top:6px;">
-        {{ form.b2b_other_text(size=60, placeholder="Isi jika memilih Lainnya") }}
-      </div>
-      {% for e in form.b2b_what_single.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
-    </div>
-
-    <div class="field">
-      <label>{{ form.b3_portion.label }}</label><br>
-      {% for sub in form.b3_portion %}
-        <label style="display:block;">{{ sub() }} {{ sub.label.text }}</label>
-      {% endfor %}
-      {% for e in form.b3_portion.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
-    </div>
-
-    <div class="field">
-      <label>{{ form.b4_freq.label }}</label><br>
-      {% for sub in form.b4_freq %}
-        <label style="display:block;">{{ sub() }} {{ sub.label.text }}</label>
-      {% endfor %}
-      {% for e in form.b4_freq.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
-    </div>
-
-    <h2>C. Pernyataan (Skala 1–5)</h2>
-    <p>1 = Sangat Tidak Setuju … 5 = Sangat Setuju</p>
-
-    {% macro likert(field) -%}
-      <div class="field" style="border:1px solid #eee; border-radius:12px; padding:10px;">
-        <div><b>{{ field.label.text }}</b></div>
-        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:6px;">
-          {% for sub in field %}
-            <label>{{ sub() }} {{ sub.label.text }}</label>
+      <div class="field">
+        <label class="lbl">{{ form.a5_used_ai.label.text }}</label>
+        <div class="chips">
+          {% for sub in form.a5_used_ai %}
+            <label class="chip">
+              {{ sub(class_="chip__radio") }}
+              <span class="chip__text">{{ sub.label.text }}</span>
+            </label>
           {% endfor %}
         </div>
-        {% for e in field.errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
+        {% for e in form.a5_used_ai.errors %}<div class="err">{{ e }}</div>{% endfor %}
       </div>
+    </section>
+
+    <!-- Card: Pola Umum -->
+    <section class="card">
+      <h2 class="card-title">Pola Umum Pemanfaatan</h2>
+
+      <div class="field">
+        <label class="lbl">{{ form.b1a_when_multi.label.text }}</label>
+        <div class="checks">
+          {% for sub in form.b1a_when_multi %}
+            <label class="check">
+              {{ sub(class_="check__box") }}
+              <span class="check__text">{{ sub.label.text }}</span>
+            </label>
+          {% endfor %}
+        </div>
+        {{ form.b1a_other_text(class_="inp", placeholder="Isi jika memilih Lainnya") }}
+        {% for e in form.b1a_when_multi.errors %}<div class="err">{{ e }}</div>{% endfor %}
+        {% for e in form.b1a_other_text.errors %}<div class="err">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="field">
+        <label class="lbl">{{ form.b1b_when_single.label.text }}</label>
+        <div class="radios">
+          {% for sub in form.b1b_when_single %}
+            <label class="radio">
+              {{ sub(class_="radio__box") }}
+              <span class="radio__text">{{ sub.label.text }}</span>
+            </label>
+          {% endfor %}
+        </div>
+        {{ form.b1b_other_text(class_="inp", placeholder="Isi jika memilih Lainnya") }}
+        {% for e in form.b1b_when_single.errors %}<div class="err">{{ e }}</div>{% endfor %}
+        {% for e in form.b1b_other_text.errors %}<div class="err">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="field">
+        <label class="lbl">{{ form.b2a_what_multi.label.text }}</label>
+        <div class="checks">
+          {% for sub in form.b2a_what_multi %}
+            <label class="check">
+              {{ sub(class_="check__box") }}
+              <span class="check__text">{{ sub.label.text }}</span>
+            </label>
+          {% endfor %}
+        </div>
+        {{ form.b2a_other_text(class_="inp", placeholder="Isi jika memilih Lainnya") }}
+        {% for e in form.b2a_what_multi.errors %}<div class="err">{{ e }}</div>{% endfor %}
+        {% for e in form.b2a_other_text.errors %}<div class="err">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="field">
+        <label class="lbl">{{ form.b2b_what_single.label.text }}</label>
+        <div class="radios">
+          {% for sub in form.b2b_what_single %}
+            <label class="radio">
+              {{ sub(class_="radio__box") }}
+              <span class="radio__text">{{ sub.label.text }}</span>
+            </label>
+          {% endfor %}
+        </div>
+        {{ form.b2b_other_text(class_="inp", placeholder="Isi jika memilih Lainnya") }}
+        {% for e in form.b2b_what_single.errors %}<div class="err">{{ e }}</div>{% endfor %}
+        {% for e in form.b2b_other_text.errors %}<div class="err">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label class="lbl">{{ form.b3_portion.label.text }}</label>
+          <div class="radios">
+            {% for sub in form.b3_portion %}
+              <label class="radio">
+                {{ sub(class_="radio__box") }}
+                <span class="radio__text">{{ sub.label.text }}</span>
+              </label>
+            {% endfor %}
+          </div>
+          {% for e in form.b3_portion.errors %}<div class="err">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="field">
+          <label class="lbl">{{ form.b4_freq.label.text }}</label>
+          <div class="radios">
+            {% for sub in form.b4_freq %}
+              <label class="radio">
+                {{ sub(class_="radio__box") }}
+                <span class="radio__text">{{ sub.label.text }}</span>
+              </label>
+            {% endfor %}
+          </div>
+          {% for e in form.b4_freq.errors %}<div class="err">{{ e }}</div>{% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Likert helper -->
+    {% macro likert_block(title, fields, optional=False) -%}
+      <section class="card">
+        <div class="card-title-row">
+          <h2 class="card-title">{{ title }}</h2>
+          {% if optional %}<span class="badge">Opsional</span>{% endif %}
+        </div>
+        <div class="likert-hint">
+          <span>1 = Sangat Tidak Setuju</span>
+          <span>5 = Sangat Setuju</span>
+        </div>
+
+        <div class="likert-list">
+          {% for f in fields %}
+            <div class="likert-item">
+              <div class="likert-q">{{ f.label.text }}</div>
+              <div class="likert-choices">
+                {% for sub in f %}
+                  <label class="likert-chip">
+                    {{ sub(class_="likert-radio") }}
+                    <span class="likert-chip__t">{{ sub.label.text }}</span>
+                  </label>
+                {% endfor %}
+              </div>
+              {% for e in f.errors %}<div class="err">{{ e }}</div>{% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+      </section>
     {%- endmacro %}
 
-    {{ likert(form.c11) }} {{ likert(form.c12) }} {{ likert(form.c13) }} {{ likert(form.c14) }}
-    {{ likert(form.c21) }} {{ likert(form.c22) }} {{ likert(form.c23) }} {{ likert(form.c24) }}
-    {{ likert(form.c31) }} {{ likert(form.c32) }} {{ likert(form.c33) }} {{ likert(form.c34) }}
-    {{ likert(form.c41) }} {{ likert(form.c42) }} {{ likert(form.c43) }} {{ likert(form.c44) }}
-    {{ likert(form.c51) }} {{ likert(form.c52) }} {{ likert(form.c53) }} {{ likert(form.c54) }}
+    {{ likert_block("Tujuan & Perencanaan", [form.c11, form.c12, form.c13, form.c14]) }}
+    {{ likert_block("Iterasi & Modifikasi", [form.c21, form.c22, form.c23, form.c24]) }}
+    {{ likert_block("Verifikasi & Evaluasi", [form.c31, form.c32, form.c33, form.c34]) }}
+    {{ likert_block("Orientasi Pemahaman", [form.c41, form.c42, form.c43, form.c44]) }}
+    {{ likert_block("Etika & Kemandirian", [form.c51, form.c52, form.c53, form.c54]) }}
+    {{ likert_block("Situasi Penggunaan", [form.d1, form.d2, form.d3], optional=True) }}
 
-    <h2>D. Situasi Penggunaan (Opsional)</h2>
-    {{ likert(form.d1) }}
-    {{ likert(form.d2) }}
-    {{ likert(form.d3) }}
-
-    <div style="margin-top:14px;">
-      {{ form.submit(class_="btn") }}
+    <div class="sticky-actions">
+      <button class="btn-primary" type="submit">{{ form.submit.label.text }}</button>
+      <div class="mini-note">Pastikan semua bagian wajib sudah terisi.</div>
     </div>
   </form>
+</div>
+
+<script>
+  (function () {
+    const form = document.getElementById('questionnaireForm');
+    const bar = document.getElementById('progressBar');
+    const text = document.getElementById('progressText');
+
+    // hitung "terisi" secara sederhana: required checkbox/radio/text yang punya nilai
+    function calcProgress() {
+      // Required fields: semua yang punya atribut required dari WTForms tidak otomatis,
+      // jadi kita estimasi dari input yang ada + daftar name yang wajib.
+      const requiredNames = [
+        'consent',
+        'a2_univ','a3_major','a4_semester','a5_used_ai',
+        'b1a_when_multi','b1b_when_single','b2a_what_multi','b2b_what_single',
+        'b3_portion','b4_freq',
+        'c11','c12','c13','c14',
+        'c21','c22','c23','c24',
+        'c31','c32','c33','c34',
+        'c41','c42','c43','c44',
+        'c51','c52','c53','c54'
+      ];
+
+      let filled = 0;
+
+      const hasChecked = (name) => !!form.querySelector(`input[name="${name}"]:checked`);
+      const hasAnyChecked = (name) => form.querySelectorAll(`input[name="${name}"]:checked`).length > 0;
+      const hasText = (name) => {
+        const el = form.querySelector(`[name="${name}"]`);
+        return el && (el.value || '').trim().length > 0;
+      };
+
+      for (const n of requiredNames) {
+        if (n === 'consent') { if (hasChecked(n)) filled++; continue; }
+        if (['a4_semester','a5_used_ai','b1b_when_single','b2b_what_single','b3_portion','b4_freq',
+             'c11','c12','c13','c14','c21','c22','c23','c24','c31','c32','c33','c34',
+             'c41','c42','c43','c44','c51','c52','c53','c54'].includes(n)) {
+          if (hasChecked(n)) filled++;
+          continue;
+        }
+        if (['b1a_when_multi','b2a_what_multi'].includes(n)) {
+          if (hasAnyChecked(n)) filled++;
+          continue;
+        }
+        if (['a2_univ','a3_major'].includes(n)) {
+          if (hasText(n)) filled++;
+          continue;
+        }
+      }
+
+      const pct = Math.round((filled / requiredNames.length) * 100);
+      bar.style.width = pct + '%';
+      text.textContent = pct + '%';
+    }
+
+    form.addEventListener('change', calcProgress);
+    form.addEventListener('input', calcProgress);
+    calcProgress();
+  })();
+</script>
 {% endblock %}
